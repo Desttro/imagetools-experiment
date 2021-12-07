@@ -2,7 +2,6 @@
 
 import { createContext } from './context.js'
 import { createImageTools } from './imagetools.js'
-import { posix as ps } from 'path'
 
 /** @type {PluginCreator} */
 export const imagetools = () => {
@@ -33,25 +32,24 @@ export const imagetools = () => {
 				next()
 			})
 		},
-		generateBundle(_options, bundle) {
+		async generateBundle(_options, bundle) {
 			for (const [pathname, asset] of context.assets) {
 				for (const [_chunkId, output] of Object.entries(bundle)) {
 					if (typeof output.source === 'string') {
-						return images.getTransformedImageByAsset(asset).then(
-							async ({ image, metadata }) => this.getFileName(
-								this.emitFile({
-									name: ps.basename(asset.pathname, asset.extension) + `.${metadata.format}`,
-									type: 'asset',
-									source: await image.toBuffer(),
-								})
-							)
-						).then(
-							referenceId => {
-								if (typeof output.source === 'string') {
-									output.source = output.source.replace(pathname, referenceId)
-								}
-							}
+						const modifiedImage = await images.getTransformedImageByAsset(asset)
+						const emittedName = asset.basename.replace(/\.[a-z0-9]+$/g, '') + `.${modifiedImage.metadata.format}`
+
+						const fileName = this.getFileName(
+							this.emitFile({
+								name: emittedName,
+								type: 'asset',
+								source: await modifiedImage.image.toBuffer(),
+							})
 						)
+
+						if (typeof output.source === 'string') {
+							output.source = output.source.replace(pathname, fileName)
+						}
 					}
 				}
 			}

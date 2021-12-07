@@ -16,8 +16,6 @@ export const Asset = class Asset {
 			this.basename.replace(/\.[a-z0-9]+$/g, '')
 		}.${
 			createHash('md5').update(this.pathname).digest('hex').substring(0, 5)
-		}.${
-			this.extension
 		}`
 	}
 
