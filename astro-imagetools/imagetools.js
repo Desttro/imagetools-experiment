@@ -27,14 +27,12 @@ export const createImageTools = () => {
 		isRasterImageExtension: RegExp.prototype.test.bind(/^(gif|jpeg|jpg|png|webp)$/i),
 		isVectorImageExtension: RegExp.prototype.test.bind(/^(svg)$/i),
 		pipeAssetToResponse(asset, response) {
-			const awesome = this.getTransformedImageByAsset(asset).then(({ image, metadata }) => {
+			return this.getTransformedImageByAsset(asset).then(({ image, metadata }) => {
 				response.setHeader('Content-Type', `image/${metadata.format}`)
 				response.setHeader('Cache-Control', 'max-age=360000')
 
 				return image.clone().pipe(response)
 			})
-
-			return awesome
 		},
 	}
 }
