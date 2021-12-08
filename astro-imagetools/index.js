@@ -37,7 +37,7 @@ export const imagetools = () => {
 				for (const [_chunkId, output] of Object.entries(bundle)) {
 					if (typeof output.source === 'string') {
 						const modifiedImage = await images.getTransformedImageByAsset(asset)
-						const emittedName = asset.basename.replace(/\.[a-z0-9]+$/g, '') + `.${modifiedImage.metadata.format}`
+						const emittedName = asset.basename.replace(/\.[a-z0-9]+$/g, '') + `.${modifiedImage.metadata.format.replace(/\+.*$/, '')}`
 
 						const fileName = this.getFileName(
 							this.emitFile({

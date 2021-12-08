@@ -9,12 +9,15 @@ const fauxLoadImage = (pathname) => {
 	const patch = readStream => {
 		const patched = {
 			faux: true,
-			format: 'svg',
+			format: 'svg+xml',
 			toBuffer() {
 				return fs.readFileSync(pathname)
 			},
 			clone() {
 				return patched
+			},
+			pipe(...args) {
+				return fs.createReadStream(pathname).pipe(...args)
 			},
 		}
 
