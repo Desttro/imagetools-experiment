@@ -1,6 +1,6 @@
 // @ts-check
 
-import { applyTransforms, builtins, loadImage, generateTransforms } from 'imagetools-core'
+import { applyTransforms, builtins, loadImage, generateTransforms } from './imagetools-core.js'
 
 /** @type {CreateConfig} */
 export const createImageTools = () => {
